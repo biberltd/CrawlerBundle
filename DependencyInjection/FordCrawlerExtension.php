@@ -1,6 +1,6 @@
 <?php
 
-namespace Ford\Bundle\CrawlerBundle\DependencyInjection;
+namespace BiberLtd\Bundle\CrawlerBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;

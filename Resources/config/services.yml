@@ -1,4 +1,4 @@
 services:
 #    ford_crawler.example:
-#        class: Ford\Bundle\CrawlerBundle\Example
+#        class: BiberLtd\Bundle\CrawlerBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]

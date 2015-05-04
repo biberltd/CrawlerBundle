@@ -1,6 +1,6 @@
 <?php
 
-namespace Ford\Bundle\CrawlerBundle\Tests\Controller;
+namespace BiberLtd\Bundle\CrawlerBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

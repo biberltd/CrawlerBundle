@@ -1,6 +1,6 @@
 <?php
 
-namespace Ford\Bundle\CrawlerBundle\Controller;
+namespace BiberLtd\Bundle\CrawlerBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Goutte\Client;

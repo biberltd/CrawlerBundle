@@ -1,6 +1,6 @@
 <?php
 
-namespace Ford\Bundle\CrawlerBundle;
+namespace BiberLtd\Bundle\CrawlerBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
