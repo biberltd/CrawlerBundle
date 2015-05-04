@@ -1,0 +1,3 @@
+ford_crawler_homepage:
+    path:     /crawl
+    defaults: { _controller: FordCrawlerBundle:Default:index }
