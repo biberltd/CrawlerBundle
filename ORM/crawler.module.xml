@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<skipper version="3.1.2.1193" mvc="Symfony2" orm="Doctrine2">
+  <module name="CrawlerBundle" import-format="Doctrine2Php" import-path="../Entity" uuid="c3fb62fe-155e-41a5-b944-10b84f80532a">
+    <entity name="CrawlerLink" description="Stores a list o links to be crawleed." uuid="a1fa07cc-6c75-4510-b171-d89aa568e4fe">
+      <field name="id" description="System given id." type="bigint" size="15" required="true" unique="true" primary="true" unsigned="true" auto-increment="true" uuid="4ce07f9a-1e71-468d-a414-bb7781d64eef"/>
+      <field name="url" description="This is the url to be crawled." type="text" required="true" uuid="9384e447-a402-464d-ae68-25f5060955ce"/>
+      <field name="section" description="This is the url to be crawled." type="string" size="255" uuid="a2efabb4-8dcd-4af5-a28e-b52d3a330236"/>
+      <field name="hash" description="md5 hash of url + section." type="string" size="32" required="true" uuid="e064360f-5f45-4dc5-bedb-63a89d8a5d41"/>
+      <field name="priority" description="Can have negative values. Can be used as a sort order mechanism or a priority access mechanism." type="integer" size="3" required="true" unsigned="true" uuid="4feb9cfa-ee4c-47d3-ae21-43fcd257ec64"/>
+      <index name="idxUCrawlerLinkId" unique="true">
+        <index-field name="id"/>
+      </index>
+      <index name="idxUCrawlerLinkUrl" unique="true">
+        <index-field name="hash"/>
+      </index>
+      <orm-attributes>
+        <attribute name="export-file-name">CrawlerLink.php</attribute>
+        <attribute name="table">crawler_link</attribute>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="CrawlerLog" description="Stores a log of crawl runs." uuid="8bdd2e22-d755-48ad-9027-ce74866394d0">
+      <field name="id" type="bigint" size="15" required="true" unique="true" primary="true" unsigned="true" auto-increment="true" uuid="cb02efd3-0265-40fc-a088-94b856600a40"/>
+      <field name="timestamp" description="This is the date &amp; time when the crawler ran and the action is logged." type="datetime" required="true" uuid="a0493214-b028-412c-8b12-8c7aa8e1c87f"/>
+      <field name="is_changed" description="y:yes, n:no" type="string" size="1" default="n" required="true" uuid="0de810f0-46da-4c66-a3a6-efcb2548c007"/>
+      <field name="hash" description="Crawler has. This is created using md5() on corawled content." type="string" size="32" uuid="65994369-8bd8-453d-9fc2-4f43511a6ac3"/>
+      <field name="status" description="HTTP response status codes." type="smallint" required="true" uuid="be0bbc9d-a580-43b9-9b6c-a5f316c4e4e9"/>
+      <field name="content" description="Either stored file name or crawled content." type="text" uuid="fe73d9b5-b60a-4bfa-b10b-7a6b60a52e81"/>
+      <field name="link" type="bigint" size="15" unsigned="true" uuid="0c3a167f-21b0-48a2-a507-483d9ec30ffd"/>
+      <index name="idxUCrawlerLogId" unique="true">
+        <index-field name="id"/>
+      </index>
+      <index name="idxUCrawlerLog" unique="true">
+        <index-field name="timestamp"/>
+      </index>
+      <index name="idxUCrawlerLogHash" unique="true">
+        <index-field name="hash"/>
+      </index>
+      <orm-attributes>
+        <attribute name="export-file-name">CrawlerLog.php</attribute>
+        <attribute name="table">crawler_log</attribute>
+        <attribute name="options">
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="charset">utf8</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+      </orm-attributes>
+    </entity>
+    <association from="CrawlerLog" to="CrawlerLink" caption="idxFCrawledLink" inverse-alias="link" many-owner="true" many-inverse="false" uuid="2901dda9-a7ed-42c2-b9cc-948871360ca9">
+      <association-field from="link" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <orm-attributes>
+      <attribute name="namespace">BiberLtd\Core\Bundles\CrawlerBundle\Entity</attribute>
+      <attribute name="file-suffix">without-suffix</attribute>
+      <attribute name="filename-format">entity-name-only</attribute>
+    </orm-attributes>
+  </module>
+  <visual-data>
+    <entity uuid="8bdd2e22-d755-48ad-9027-ce74866394d0" bg-color="4294967295" hdr-color="4292006610" position-x="250" position-y="100" size-x="0" size-x2="20" size-y="0" size-y2="20"/>
+    <entity uuid="a1fa07cc-6c75-4510-b171-d89aa568e4fe" bg-color="4294967295" hdr-color="4292006610" position-x="50" position-y="83" size-x="0" size-x2="20" size-y="0" size-y2="20"/>
+    <module uuid="c3fb62fe-155e-41a5-b944-10b84f80532a" bg-color="4290623408" size-x="0" size-x2="385" size-y="0" size-y2="400"/>
+  </visual-data>
+</skipper>
