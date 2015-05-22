@@ -1,4 +1,4 @@
 services:
-#    ford_crawler.example:
-#        class: BiberLtd\Bundle\CrawlerBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    crawler.model:
+        class: BiberLtd\Bundle\CrawlerBundle\Services\CrawlerModel
+        arguments:    [@kernel, "default", "doctrine"]
