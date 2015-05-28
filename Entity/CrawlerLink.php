@@ -14,6 +14,7 @@
  */
 
 namespace BiberLtd\Bundle\CrawlerBundle\Entity;
+use BiberLtd\Bundle\CoreBundle\CoreEntity;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -27,7 +28,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     }
  * )
  */
-class CrawlerLink
+class CrawlerLink extends CoreEntity
 {
     /**
      * @ORM\Id
