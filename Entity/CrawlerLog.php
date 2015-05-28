@@ -13,7 +13,6 @@
  *
  */
 namespace BiberLtd\Bundle\CrawlerBundle\Entity;
-use BiberLtd\Bundle\CoreBundle\CoreEntity;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -28,7 +27,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     }
  * )
  */
-class CrawlerLog extends CoreEntity{
+class CrawlerLog{
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", length=15, options={"unsigned":true})

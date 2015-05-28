@@ -22,6 +22,7 @@ use BiberLtd\Bundle\CrawlerBundle\Entity as BundleEntity;
 /** Core Service*/
 use BiberLtd\Bundle\CoreBundle\Services as CoreServices;
 use BiberLtd\Bundle\CoreBundle\Exceptions as CoreExceptions;
+use BiberLtd\Bundle\CoreBundle\Responses\ModelResponse;
 
 class CrawlerModel extends CoreModel {
     /**
@@ -264,8 +265,11 @@ class CrawlerModel extends CoreModel {
         }
         $result = null;
         switch($crawlerLink){
-            case is_numeric($crawlerLink):
+            case is_int($crawlerLink) || is_numeric($crawlerLink):
                 $result = $this->em->getRepository($this->entity['cli']['name'])->findOneBy(array('id' => $crawlerLink));
+                break;
+            case is_string($crawlerLink):
+                $result = $this->em->getRepository($this->entity['cli']['name'])->findOneBy(array('url' => $crawlerLink));
                 break;
         }
         if(is_null($result)){
@@ -355,9 +359,6 @@ class CrawlerModel extends CoreModel {
                 }
                 if (!property_exists($data, 'date_updated')) {
                     $data->date_updated = new \DateTime('now', new \DateTimeZone($this->kernel->getContainer()->getParameter('app_timezone')));
-                }
-                if (!property_exists($data, 'count_logs')) {
-                    $data->count_logs = 0;
                 }
                 foreach ($data as $column => $value) {
                     $set = 'set' . $this->translateColumnName($column);
@@ -468,8 +469,8 @@ class CrawlerModel extends CoreModel {
         }
         $oStr = $wStr = $gStr = $fStr = '';
 
-        $qStr = 'SELECT '.$this->entity['al']['alias'].', '.$this->entity['cli']['alias']
-            .' FROM '.$this->entity['al']['name'].' '.$this->entity['al']['alias'];
+        $qStr = 'SELECT '.$this->entity['cli']['alias'].', '.$this->entity['cli']['alias']
+            .' FROM '.$this->entity['cli']['name'].' '.$this->entity['cli']['alias'];
 
         if(!is_null($sortOrder)){
             foreach($sortOrder as $column => $direction){
@@ -497,12 +498,11 @@ class CrawlerModel extends CoreModel {
         $q = $this->addLimit($q, $limit);
 
         $result = $q->getResult();
-
         $entities = array();
         foreach($result as $entry){
-            $id = $entry->getCrawlerLink()->getId();
+            $id = $entry->getId();
             if(!isset($unique[$id])){
-                $entities[] = $entry->getCrawlerLink();
+                $entities[] = $entry;
             }
         }
         $totalRows = count($entities);
