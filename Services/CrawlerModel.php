@@ -18,6 +18,7 @@ namespace BiberLtd\Bundle\CrawlerBundle\Services;
 use BiberLtd\Bundle\CoreBundle\CoreModel;
 
 /** Entities to be used */
+use BiberLtd\Bundle\CoreBundle\Responses\ModelResponse;
 use BiberLtd\Bundle\CrawlerBundle\Entity as BundleEntity;
 
 /** Core Service*/
