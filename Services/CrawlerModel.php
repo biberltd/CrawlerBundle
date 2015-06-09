@@ -578,7 +578,8 @@ class CrawlerModel extends CoreModel {
 	 *  				List crawlerLogs from database based on a variety of conditions.
 	 *
 	 * @since			1.0.0
-	 * @version         1.0.4
+	 * @version         1.0.1
+	 * @author          Can Berkol
 	 * @author          Said İmamoğlu
 	 *
 	 * @use             $this->createException()
@@ -604,7 +605,9 @@ class CrawlerModel extends CoreModel {
 		if($sortOrder != null){
 			foreach($sortOrder as $column => $direction){
 				switch($column){
+					case 'hash':
 					case 'id':
+					case 'timestamp':
 						$column = $this->entity['clo']['alias'].'.'.$column;
 						break;
 				}
@@ -802,6 +805,7 @@ class CrawlerModel extends CoreModel {
  * v1.0.1                      09.06.2015
  * Can Berkol
  * **************************************
+ * BF :: listCrawlerLogs() ordering bug fixed.
  * FR :: getLastCrawlerLog() method implemented.
  * FR :: countCrawledPagesBetween() method implemented.
  *

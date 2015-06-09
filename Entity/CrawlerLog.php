@@ -5,8 +5,8 @@
  *
  * @author		Can Berkol
  *
- * @version     1.0.0
- * @date        05.05.2014
+ * @version     1.0.1
+ * @date        09.06.2014
  *
  * @copyright   Biber Ltd. (http://www.biberltd.com)
  * @license     GPL v3.0
@@ -61,7 +61,7 @@ class CrawlerLog{
     private $content;
 
     /**
-     * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\CrawlerBundle\Entity\CrawlerLink")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\CrawlerBundle\Entity\CrawlerLink")
      * @ORM\JoinColumn(name="link", referencedColumnName="id", onDelete="CASCADE")
      */
     private $link;
@@ -313,6 +313,12 @@ class CrawlerLog{
 }
 /**
  * Change Log:
+ * **************************************
+ * v1.0.1					   09.06.2015
+ * Can Berkol
+ * **************************************
+ * BF :: Wrong namespaces fixed.
+ *
  * **************************************
  * v1.0.0					   05.05.2015
  * Can Berkol
