@@ -358,7 +358,7 @@ class CrawlerModel extends CoreModel {
 	 */
 	public function getLastCrawlerLog($filter = null) {
 		$timeStamp = time();
-		$response = $this->listCrawlerLinks($filter, array('timestamp' => 'desc'), array('start' => 0, 'count' => 1));
+		$response = $this->listCrawlerLogs($filter, array('timestamp' => 'desc'), array('start' => 0, 'count' => 1));
 
 		if($response->error->exist){
 			return $response;
