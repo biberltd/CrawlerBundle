@@ -5,12 +5,13 @@
  * @subpackage	Services
  * @name	    CrawlerModel
  *
+ * @author		Can Berkol
  * @author		Said İmamoğlu
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.0.0
- * @date        05.05.2015
+ * @version     1.0.1
+ * @date        09.06.2015
  */
 namespace BiberLtd\Bundle\CrawlerBundle\Services;
 /** Extends CoreModel */
@@ -304,6 +305,29 @@ class CrawlerModel extends CoreModel {
 
         return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
     }
+	/**
+	 * @name 			getLastCrawlerLog()
+	 *
+	 * @since			1.0.1
+	 * @version         1.0.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           array			$filter
+	 *
+	 * @return          mixed           $response
+	 */
+	public function getLastCrawlerLog($filter = null) {
+		$timeStamp = time();
+		$response = $this->listCrawlerLinks($filter, array('timestamp' => 'desc'), array('start' => 0, 'count' => 1));
+
+		if($response->error->exist){
+			return $response;
+		}
+
+		return new ModelResponse($response->result->set, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
     /**
      * @name 			insertCrawlerLink()
      *
@@ -736,6 +760,12 @@ class CrawlerModel extends CoreModel {
 
 /**
  * Change Log
+ * **************************************
+ * v1.0.1                      09.06.2015
+ * Can Berkol
+ * **************************************
+ * FR :: getLastCrwlerLog() method implemented.
+ *
  * **************************************
  * v1.0.0                      Said İmamoğlu
  * 05.05.2015
