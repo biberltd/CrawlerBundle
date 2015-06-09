@@ -61,6 +61,44 @@ class CrawlerModel extends CoreModel {
 		}
 	}
 	/**
+	 * @name 			countCrawledPagesBetween()
+	 *
+	 * @since			1.0.1
+	 * @version         1.0.1
+	 * @author          Can Berkol
+	 *
+	 * @use             $this->createException()
+	 *
+	 * @param           \DateTime		$dateStart
+	 * @param           \DateTime		$dateEnd
+	 *
+	 * @return          mixed           $response
+	 */
+	public function countCrawledPagesBetween($dateStart, $dateEnd) {
+		$timeStamp = time();
+		$filter[] = array(
+			'glue' => 'and',
+			'condition' => array(
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['cli']['alias'].'.timestamp', 'comparison' => '>=', 'value' => $dateStart->format('Y-m-d H:is')),
+				),
+				array(
+					'glue' => 'and',
+					'condition' => array('column' => $this->entity['cli']['alias'].'.timestamp', 'comparison' => '<=', 'value' => $dateEnd->format('Y-m-d H:is')),
+				)
+			)
+		);
+
+		$response = $this->listCrawlerLogs($filter, array('timestamp' => 'desc'), array('start' => 0, 'count' => 1));
+
+		if($response->error->exist){
+			return $response;
+		}
+
+		return new ModelResponse(count($response->result->set), 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+	}
+	/**
 	 * @name 			deleteCrawlerLink()
 	 *
 	 * @since			1.0.0
@@ -764,7 +802,8 @@ class CrawlerModel extends CoreModel {
  * v1.0.1                      09.06.2015
  * Can Berkol
  * **************************************
- * FR :: getLastCrwlerLog() method implemented.
+ * FR :: getLastCrawlerLog() method implemented.
+ * FR :: countCrawledPagesBetween() method implemented.
  *
  * **************************************
  * v1.0.0                      Said İmamoğlu
