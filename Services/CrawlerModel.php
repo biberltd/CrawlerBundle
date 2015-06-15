@@ -18,6 +18,7 @@ namespace BiberLtd\Bundle\CrawlerBundle\Services;
 use BiberLtd\Bundle\CoreBundle\CoreModel;
 
 /** Entities to be used */
+use BiberLtd\Bundle\CoreBundle\Responses\ModelResponse;
 use BiberLtd\Bundle\CrawlerBundle\Entity as BundleEntity;
 
 /** Core Service*/
@@ -320,7 +321,7 @@ class CrawlerModel extends CoreModel {
 	 */
 	public function getLastCrawlerLog($filter = null) {
 		$timeStamp = time();
-		$response = $this->listCrawlerLinks($filter, array('timestamp' => 'desc'), array('start' => 0, 'count' => 1));
+		$response = $this->listCrawlerLogs($filter, array('timestamp' => 'desc'), array('start' => 0, 'count' => 1));
 
 		if($response->error->exist){
 			return $response;
@@ -567,6 +568,7 @@ class CrawlerModel extends CoreModel {
 			foreach($sortOrder as $column => $direction){
 				switch($column){
 					case 'id':
+					case 'timestamp':
 						$column = $this->entity['clo']['alias'].'.'.$column;
 						break;
 				}
