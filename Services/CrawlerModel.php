@@ -5,24 +5,25 @@
  * @subpackage	Services
  * @name	    CrawlerModel
  *
+ * @author		Can Berkol
  * @author		Said İmamoğlu
  *
  * @copyright   Biber Ltd. (www.biberltd.com)
  *
- * @version     1.0.0
- * @date        05.05.2015
+ * @version     1.0.1
+ * @date        09.06.2015
  */
 namespace BiberLtd\Bundle\CrawlerBundle\Services;
 /** Extends CoreModel */
 use BiberLtd\Bundle\CoreBundle\CoreModel;
 
 /** Entities to be used */
+use BiberLtd\Bundle\CoreBundle\Responses\ModelResponse;
 use BiberLtd\Bundle\CrawlerBundle\Entity as BundleEntity;
 
 /** Core Service*/
 use BiberLtd\Bundle\CoreBundle\Services as CoreServices;
 use BiberLtd\Bundle\CoreBundle\Exceptions as CoreExceptions;
-use BiberLtd\Bundle\CoreBundle\Responses\ModelResponse;
 
 class CrawlerModel extends CoreModel {
     /**
@@ -265,7 +266,7 @@ class CrawlerModel extends CoreModel {
         }
         $result = null;
         switch($crawlerLink){
-            case is_int($crawlerLink) || is_numeric($crawlerLink):
+            case is_numeric($crawlerLink):
                 $result = $this->em->getRepository($this->entity['cli']['name'])->findOneBy(array('id' => $crawlerLink));
                 break;
             case is_string($crawlerLink):
@@ -307,6 +308,29 @@ class CrawlerModel extends CoreModel {
         }
 
         return new ModelResponse($result, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+    }
+    /**
+     * @name 			getLastCrawlerLog()
+     *
+     * @since			1.0.1
+     * @version         1.0.1
+     * @author          Can Berkol
+     *
+     * @use             $this->createException()
+     *
+     * @param           array			$filter
+     *
+     * @return          mixed           $response
+     */
+    public function getLastCrawlerLog($filter = null) {
+        $timeStamp = time();
+        $response = $this->listCrawlerLogs($filter, array('timestamp' => 'desc'), array('start' => 0, 'count' => 1));
+
+        if($response->error->exist){
+            return $response;
+        }
+
+        return new ModelResponse($response->result->set, 1, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
     }
     /**
      * @name 			insertCrawlerLink()
@@ -469,8 +493,8 @@ class CrawlerModel extends CoreModel {
         }
         $oStr = $wStr = $gStr = $fStr = '';
 
-        $qStr = 'SELECT '.$this->entity['cli']['alias'].', '.$this->entity['cli']['alias']
-            .' FROM '.$this->entity['cli']['name'].' '.$this->entity['cli']['alias'];
+        $qStr = 'SELECT '.$this->entity['al']['alias'].', '.$this->entity['cli']['alias']
+            .' FROM '.$this->entity['al']['name'].' '.$this->entity['al']['alias'];
 
         if(!is_null($sortOrder)){
             foreach($sortOrder as $column => $direction){
@@ -498,11 +522,12 @@ class CrawlerModel extends CoreModel {
         $q = $this->addLimit($q, $limit);
 
         $result = $q->getResult();
+
         $entities = array();
         foreach($result as $entry){
-            $id = $entry->getId();
+            $id = $entry->getCrawlerLink()->getId();
             if(!isset($unique[$id])){
-                $entities[] = $entry;
+                $entities[] = $entry->getCrawlerLink();
             }
         }
         $totalRows = count($entities);
@@ -543,6 +568,7 @@ class CrawlerModel extends CoreModel {
             foreach($sortOrder as $column => $direction){
                 switch($column){
                     case 'id':
+                    case 'timestamp':
                         $column = $this->entity['clo']['alias'].'.'.$column;
                         break;
                 }
@@ -737,6 +763,12 @@ class CrawlerModel extends CoreModel {
 /**
  * Change Log
  * **************************************
+ * v1.0.1                      09.06.2015
+ * Can Berkol
+ * **************************************
+ * FR :: getLastCrwlerLog() method implemented.
+ *
+ * **************************************
  * v1.0.0                      Said İmamoğlu
  * 05.05.2015
  * **************************************
@@ -761,4 +793,3 @@ class CrawlerModel extends CoreModel {
  * A updateCrawlerLog()
  * A updateCrawlerLogs()
  */
-
