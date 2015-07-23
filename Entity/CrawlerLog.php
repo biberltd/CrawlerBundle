@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     options={"collate":"utf8_turkish_ci","charset":"utf8","engine":"innodb"},
  *     uniqueConstraints={
  *         @ORM\UniqueConstraint(name="idxUCrawlerLogId", columns={"id"}),
- *         @ORM\UniqueConstraint(name="idxUCrawlerLog", columns={"timestamp"}),
+ *         @ORM\UniqueConstraint(name="idxUCrawlerLog", columns={"timestamp","link","rule"}),
  *         @ORM\UniqueConstraint(name="idxUCrawlerLogHash", columns={"hash"})
  *     }
  * )
@@ -62,9 +62,15 @@ class CrawlerLog{
 
     /**
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\CrawlerBundle\Entity\CrawlerLink")
-     * @ORM\JoinColumn(name="link", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="link", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $link;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\CrawlerBundle\Entity\XpathRule")
+     * @ORM\JoinColumn(name="rule", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $rule;
 
 	/**
 	 * @name        getContent ()

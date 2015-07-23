@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<skipper version="3.1.2.1193" mvc="Symfony2" orm="Doctrine2">
-  <module name="CrawlerBundle" import-format="Doctrine2Php" import-path="../Entity" uuid="c3fb62fe-155e-41a5-b944-10b84f80532a">
-    <entity name="CrawlerLink" description="Stores a list o links to be crawleed." uuid="a1fa07cc-6c75-4510-b171-d89aa568e4fe">
+<skipper version="3.2.3.1247" mvc="Symfony2" orm="Doctrine2">
+  <module name="\CrawlerBundle" local-name="CrawlerBundle" namespace="\BiberLtd\Bundle\CrawlerBundle\Entity" local-namespace="BiberLtd\Bundle\CrawlerBundle\Entity" export-format="Doctrine2Php" export-path="../Entity" uuid="c3fb62fe-155e-41a5-b944-10b84f80532a">
+    <entity name="\BiberLtd\Bundle\CrawlerBundle\Entity\CrawlerLink" local-name="CrawlerLink" namespace="\BiberLtd\Bundle\CrawlerBundle\Entity" description="Stores a list o links to be crawleed." uuid="a1fa07cc-6c75-4510-b171-d89aa568e4fe">
       <field name="id" description="System given id." type="bigint" size="15" required="true" unique="true" primary="true" unsigned="true" auto-increment="true" uuid="4ce07f9a-1e71-468d-a414-bb7781d64eef"/>
       <field name="url" description="This is the url to be crawled." type="text" required="true" uuid="9384e447-a402-464d-ae68-25f5060955ce"/>
       <field name="section" description="This is the url to be crawled." type="string" size="255" uuid="a2efabb4-8dcd-4af5-a28e-b52d3a330236"/>
@@ -23,19 +23,22 @@
         </attribute>
       </orm-attributes>
     </entity>
-    <entity name="CrawlerLog" description="Stores a log of crawl runs." uuid="8bdd2e22-d755-48ad-9027-ce74866394d0">
+    <entity name="\BiberLtd\Bundle\CrawlerBundle\Entity\CrawlerLog" local-name="CrawlerLog" namespace="\BiberLtd\Bundle\CrawlerBundle\Entity" description="Stores a log of crawl runs." uuid="8bdd2e22-d755-48ad-9027-ce74866394d0">
       <field name="id" type="bigint" size="15" required="true" unique="true" primary="true" unsigned="true" auto-increment="true" uuid="cb02efd3-0265-40fc-a088-94b856600a40"/>
       <field name="timestamp" description="This is the date &amp; time when the crawler ran and the action is logged." type="datetime" required="true" uuid="a0493214-b028-412c-8b12-8c7aa8e1c87f"/>
       <field name="is_changed" description="y:yes, n:no" type="string" size="1" default="n" required="true" uuid="0de810f0-46da-4c66-a3a6-efcb2548c007"/>
       <field name="hash" description="Crawler has. This is created using md5() on corawled content." type="string" size="32" uuid="65994369-8bd8-453d-9fc2-4f43511a6ac3"/>
       <field name="status" description="HTTP response status codes." type="smallint" required="true" uuid="be0bbc9d-a580-43b9-9b6c-a5f316c4e4e9"/>
       <field name="content" description="Either stored file name or crawled content." type="text" uuid="fe73d9b5-b60a-4bfa-b10b-7a6b60a52e81"/>
-      <field name="link" type="bigint" size="15" unsigned="true" uuid="0c3a167f-21b0-48a2-a507-483d9ec30ffd"/>
+      <field name="link" description="Address that is crawled." type="bigint" size="15" required="true" unsigned="true" uuid="0c3a167f-21b0-48a2-a507-483d9ec30ffd"/>
+      <field name="rule" description="Xpath rule that is crawled." type="integer" uuid="bfde6cdf-4293-4428-9e23-260ccff174bd"/>
       <index name="idxUCrawlerLogId" unique="true">
         <index-field name="id"/>
       </index>
       <index name="idxUCrawlerLog" unique="true">
         <index-field name="timestamp"/>
+        <index-field name="link"/>
+        <index-field name="rule"/>
       </index>
       <index name="idxUCrawlerLogHash" unique="true">
         <index-field name="hash"/>
@@ -50,21 +53,74 @@
         </attribute>
       </orm-attributes>
     </entity>
-    <association from="CrawlerLog" to="CrawlerLink" caption="idxFCrawledLink" inverse-alias="link" many-owner="true" many-inverse="false" uuid="2901dda9-a7ed-42c2-b9cc-948871360ca9">
+    <association from="\BiberLtd\Bundle\CrawlerBundle\Entity\CrawlerLog" to="\BiberLtd\Bundle\CrawlerBundle\Entity\CrawlerLink" caption="idxFCrawledLink" inverse-alias="link" many-owner="true" many-inverse="false" parent-required="true" uuid="2901dda9-a7ed-42c2-b9cc-948871360ca9">
       <association-field from="link" to="id"/>
       <orm-attributes>
         <attribute name="on-delete">CASCADE</attribute>
       </orm-attributes>
     </association>
+    <association from="\BiberLtd\Bundle\CrawlerBundle\Entity\CrawlerLog" to="\BiberLtd\Bundle\CrawlerBundle\Entity\XpathRule" caption="idxFRuleOfCrawlerLog" inverse-alias="rule" many-owner="true" many-inverse="false" uuid="d0c38c8d-1b51-4fa0-a224-0e20e2936085">
+      <association-field from="rule" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="\BiberLtd\Bundle\CrawlerBundle\Entity\XpathRule" local-name="XpathRule" namespace="\BiberLtd\Bundle\CrawlerBundle\Entity" description="Stores a list of xpath rules." uuid="4ba075d2-95e8-4a0c-a86b-f2639280bb38">
+      <field name="id" description="System given id." type="integer" default="10" required="true" unique="true" primary="true" auto-increment="true" uuid="a4720081-3a67-4b9e-b8b0-d0d9b0f51237"/>
+      <field name="rule" description="X-path rule." type="text" required="true" uuid="2c9f6e00-68ec-4670-a690-e5b62b2dfa9c"/>
+      <field name="parent" type="integer" uuid="449e6795-c649-4492-9d99-0b6b324a1dfa"/>
+      <index name="idxNXpathRules">
+        <index-field name="rule"/>
+      </index>
+      <orm-attributes>
+        <attribute name="export-file-name">XpathRule.php</attribute>
+        <attribute name="table">xpath_rule</attribute>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\BiberLtd\Bundle\CrawlerBundle\Entity\XpathRule" to="\BiberLtd\Bundle\CrawlerBundle\Entity\XpathRule" caption="idxFParentXpathRule" inverse-alias="parent" many-owner="true" many-inverse="false" uuid="09a4d7be-8077-422a-8300-531cf3e5ada6">
+      <association-field from="parent" to="id"/>
+    </association>
+    <entity name="\BiberLtd\Bundle\CrawlerBundle\Entity\XpathRulesOfCrawlerLink" local-name="XpathRulesOfCrawlerLink" namespace="\BiberLtd\Bundle\CrawlerBundle\Entity" description="Associates xpath rules with links to be crawled&#xE7;" uuid="f7ec7c26-785a-4331-9b99-b03bf56ad5a3">
+      <field name="link" type="bigint" size="15" required="true" primary="true" unsigned="true" uuid="4fc17863-75f9-4aa3-b671-468dbf134f89"/>
+      <field name="rule" type="integer" required="true" primary="true" uuid="64662207-11f4-42f9-9548-60aa15193478"/>
+      <orm-attributes>
+        <attribute name="export-file-name">XpathRulesOfCrawlerLink.php</attribute>
+        <attribute name="table">xpath_rules_of_crawler_link</attribute>
+        <attribute name="options">
+          <attribute name="charset">utf8</attribute>
+          <attribute name="collate">utf8_turkish_ci</attribute>
+          <attribute name="engine">innodb</attribute>
+        </attribute>
+      </orm-attributes>
+    </entity>
+    <association from="\BiberLtd\Bundle\CrawlerBundle\Entity\XpathRulesOfCrawlerLink" to="\BiberLtd\Bundle\CrawlerBundle\Entity\CrawlerLink" caption="idxFCrawlerLinkOfXpathRule" inverse-alias="link" many-owner="true" many-inverse="false" parent-required="true" uuid="38bb6ec0-beaa-432f-bf2b-1957467f2b48">
+      <association-field from="link" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
+    <association from="\BiberLtd\Bundle\CrawlerBundle\Entity\XpathRulesOfCrawlerLink" to="\BiberLtd\Bundle\CrawlerBundle\Entity\XpathRule" caption="idxFRuleOfCrawlerLink" inverse-alias="rule" many-owner="true" many-inverse="false" parent-required="true" uuid="64870149-2b2c-4d7d-8861-9d4178005372">
+      <association-field from="rule" to="id"/>
+      <orm-attributes>
+        <attribute name="on-delete">CASCADE</attribute>
+      </orm-attributes>
+    </association>
     <orm-attributes>
-      <attribute name="namespace">BiberLtd\Core\Bundles\CrawlerBundle\Entity</attribute>
+      <attribute name="namespace">BiberLtd\Bundle\CrawlerBundle\Entity</attribute>
       <attribute name="file-suffix">without-suffix</attribute>
       <attribute name="filename-format">entity-name-only</attribute>
     </orm-attributes>
   </module>
   <visual-data>
-    <entity uuid="8bdd2e22-d755-48ad-9027-ce74866394d0" bg-color="4294967295" hdr-color="4292006610" position-x="250" position-y="100" size-x="0" size-x2="20" size-y="0" size-y2="20"/>
-    <entity uuid="a1fa07cc-6c75-4510-b171-d89aa568e4fe" bg-color="4294967295" hdr-color="4292006610" position-x="50" position-y="83" size-x="0" size-x2="20" size-y="0" size-y2="20"/>
-    <module uuid="c3fb62fe-155e-41a5-b944-10b84f80532a" bg-color="4290623408" size-x="0" size-x2="385" size-y="0" size-y2="400"/>
+    <entity uuid="4ba075d2-95e8-4a0c-a86b-f2639280bb38" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="341" size-x="0" size-x2="239" size-y="0" size-y2="59"/>
+    <entity uuid="8bdd2e22-d755-48ad-9027-ce74866394d0" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="300" position-y="50" size-x="0" size-x2="115" size-y="0" size-y2="115"/>
+    <entity uuid="a1fa07cc-6c75-4510-b171-d89aa568e4fe" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="50" position-y="50" size-x="0" size-x2="242" size-y="0" size-y2="87"/>
+    <entity uuid="f7ec7c26-785a-4331-9b99-b03bf56ad5a3" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="300" position-y="300" size-x="0" size-x2="125" size-y="0" size-y2="31"/>
+    <module uuid="c3fb62fe-155e-41a5-b944-10b84f80532a" bg-color="#BDB7B0" size-x="0" size-x2="545" size-y="0" size-y2="451"/>
   </visual-data>
 </skipper>
