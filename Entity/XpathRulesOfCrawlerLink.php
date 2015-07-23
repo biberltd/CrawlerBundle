@@ -24,4 +24,77 @@ class XpathRulesOfCrawlerLink
      * @ORM\JoinColumn(name="rule", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     private $rule;
+
+    /**
+     * @name        getLink ()
+     *
+     * @author      Said İmamoğlu
+     *
+     * @since       1.0.0
+     * @version     1.0.0
+     *
+     * @return      mixed
+     */
+    public function getLink()
+    {
+        return $this->link;
+    }
+
+    /**
+     * @name        setLink ()
+     *
+     * @author      Said İmamoğlu
+     *
+     * @since       1.0.0
+     * @version     1.0.0
+     *
+     * @param       mixed $link
+     *
+     * @return      $this
+     */
+    public function setLink($link)
+    {
+        if (!$this->setModified('link', $link)->isModified()) {
+            return $this;
+        }
+        $this->link = $link;
+        return $this;
+    }
+
+    /**
+     * @name        getRule ()
+     *
+     * @author      Said İmamoğlu
+     *
+     * @since       1.0.0
+     * @version     1.0.0
+     *
+     * @return      mixed
+     */
+    public function getRule()
+    {
+        return $this->rule;
+    }
+
+    /**
+     * @name        setRule ()
+     *
+     * @author      Said İmamoğlu
+     *
+     * @since       1.0.0
+     * @version     1.0.0
+     *
+     * @param       mixed $rule
+     *
+     * @return      $this
+     */
+    public function setRule($rule)
+    {
+        if (!$this->setModified('rule', $rule)->isModified()) {
+            return $this;
+        }
+        $this->rule = $rule;
+        return $this;
+    }
+
 }

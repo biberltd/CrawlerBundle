@@ -29,4 +29,113 @@ class XpathRule
      * @ORM\JoinColumn(name="parent", referencedColumnName="id")
      */
     private $parent;
+
+    /**
+     * @name        getId ()
+     *
+     * @author      Said İmamoğlu
+     *
+     * @since       1.0.0
+     * @version     1.0.0
+     *
+     * @return      mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @name        setId ()
+     *
+     * @author      Said İmamoğlu
+     *
+     * @since       1.0.0
+     * @version     1.0.0
+     *
+     * @param       mixed $id
+     *
+     * @return      $this
+     */
+    public function setId($id)
+    {
+        if (!$this->setModified('id', $id)->isModified()) {
+            return $this;
+        }
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @name        getRule ()
+     *
+     * @author      Said İmamoğlu
+     *
+     * @since       1.0.0
+     * @version     1.0.0
+     *
+     * @return      mixed
+     */
+    public function getRule()
+    {
+        return $this->rule;
+    }
+
+    /**
+     * @name        setRule ()
+     *
+     * @author      Said İmamoğlu
+     *
+     * @since       1.0.0
+     * @version     1.0.0
+     *
+     * @param       mixed $rule
+     *
+     * @return      $this
+     */
+    public function setRule($rule)
+    {
+        if (!$this->setModified('rule', $rule)->isModified()) {
+            return $this;
+        }
+        $this->rule = $rule;
+        return $this;
+    }
+
+    /**
+     * @name        getParent ()
+     *
+     * @author      Said İmamoğlu
+     *
+     * @since       1.0.0
+     * @version     1.0.0
+     *
+     * @return      mixed
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @name        setParent ()
+     *
+     * @author      Said İmamoğlu
+     *
+     * @since       1.0.0
+     * @version     1.0.0
+     *
+     * @param       mixed $parent
+     *
+     * @return      $this
+     */
+    public function setParent($parent)
+    {
+        if (!$this->setModified('parent', $parent)->isModified()) {
+            return $this;
+        }
+        $this->parent = $parent;
+        return $this;
+    }
+    
 }
