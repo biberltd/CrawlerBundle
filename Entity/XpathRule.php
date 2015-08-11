@@ -25,6 +25,11 @@ class XpathRule
     private $rule;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $parentRule;
+
+    /**
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\CrawlerBundle\Entity\XpathRule")
      * @ORM\JoinColumn(name="parent", referencedColumnName="id")
      */
@@ -135,6 +140,41 @@ class XpathRule
             return $this;
         }
         $this->parent = $parent;
+        return $this;
+    }
+
+    /**
+     * @name        getParentRule ()
+     *
+     * @author      Can Berkol
+     *
+     * @since       1.0.0
+     * @version     1.0.0
+     *
+     * @return      mixed
+     */
+    public function getParentRule(){
+        return $this->parentRule;
+    }
+
+    /**
+     * @name              setParentRule ()
+     *
+     * @author      Can Berkol
+     *
+     * @since       1.0.0
+     * @version     1.0.0
+     *
+     * @param       mixed $parentRule
+     *
+     * @return      $this
+     */
+    public function setParentRule($parentRule){
+        if(!$this->setModified('parentRule', $parentRule)->isModified()){
+            return $this;
+        }
+        $this->parentRule = $parentRule;
+
         return $this;
     }
     

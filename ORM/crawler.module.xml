@@ -69,6 +69,7 @@
       <field name="id" description="System given id." type="integer" default="10" required="true" unique="true" primary="true" auto-increment="true" uuid="a4720081-3a67-4b9e-b8b0-d0d9b0f51237"/>
       <field name="rule" description="X-path rule." type="text" required="true" uuid="2c9f6e00-68ec-4670-a690-e5b62b2dfa9c"/>
       <field name="parent" type="integer" uuid="449e6795-c649-4492-9d99-0b6b324a1dfa"/>
+      <field name="parentRule" type="text" uuid="d45dd05d-461d-42d4-a65f-ee16a3dbfbd2"/>
       <index name="idxNXpathRules">
         <index-field name="rule"/>
       </index>
