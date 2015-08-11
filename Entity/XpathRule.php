@@ -29,11 +29,6 @@ class XpathRule
     private $parentRule;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $parentRule;
-
-    /**
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\CrawlerBundle\Entity\XpathRule")
      * @ORM\JoinColumn(name="parent", referencedColumnName="id")
      */
