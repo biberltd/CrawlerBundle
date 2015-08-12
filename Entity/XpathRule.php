@@ -1,5 +1,6 @@
 <?php
 namespace BiberLtd\Bundle\CrawlerBundle\Entity;
+use BiberLtd\Bundle\CoreBundle\CoreEntity;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     indexes={@ORM\Index(name="idxNXpathRules", columns={"rule"})}
  * )
  */
-class XpathRule
+class XpathRule extends CoreEntity
 {
     /**
      * @ORM\Id
@@ -23,9 +24,8 @@ class XpathRule
      * @ORM\Column(type="text", nullable=false)
      */
     private $rule;
-
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text", nullable=false)
      */
     private $parentRule;
 
@@ -146,21 +146,21 @@ class XpathRule
     /**
      * @name        getParentRule ()
      *
-     * @author      Can Berkol
+     * @author      Said İmamoğlu
      *
      * @since       1.0.0
      * @version     1.0.0
      *
      * @return      mixed
      */
-    public function getParentRule(){
+    public function getParentRule()
+    {
         return $this->parentRule;
     }
 
     /**
-     * @name              setParentRule ()
-     *
-     * @author      Can Berkol
+     * @name        setParentRule ()
+     * @author      Said İmamoğlu
      *
      * @since       1.0.0
      * @version     1.0.0

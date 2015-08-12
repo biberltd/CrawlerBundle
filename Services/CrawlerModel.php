@@ -70,6 +70,82 @@ class CrawlerModel extends CoreModel
     }
 
     /**
+     * @name    Said İmamoğlu
+     * @since 1.0.3
+     * @version 1.0.3
+     * @param $links
+     * @param $xPath
+     * @return array|ModelResponse
+     */
+    public function addCrawlerLinksToXPathRule($links,$xPath){
+        $timeStamp = time();
+        if (!is_array($links)) {
+            return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+        }
+        $countInserts = 0;
+        $insertedItems = array();
+        $ruleResponse = $this->getXPathRule($xPath);
+        if ($ruleResponse->error->exist) {
+            return $ruleResponse;
+        }
+        foreach ($links as $link) {
+            $linkResponse = $this->getCrawlerLink($link);
+            if ($linkResponse->error->exist) {
+                continue;
+            }
+            $entity = new BundleEntity\XpathRulesOfCrawlerLink();
+            $entity->setLink($linkResponse->result->set);
+            $entity->setRule($ruleResponse->result->set);
+            $this->em->persist($entity);
+            $insertedItems[] = $entity;
+            $countInserts++;
+        }
+        if ($countInserts > 0) {
+            $this->em->flush();
+            return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+        }
+        return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+    }
+
+    /**
+     * @name    Said İmamoğlu
+     * @since 1.0.3
+     * @version 1.0.3
+     * @param $rules
+     * @param $link
+     * @return array|ModelResponse
+     */
+    public function addXpathRulesToCrawlerLink($rules,$link){
+        $timeStamp = time();
+        if (!is_array($rules)) {
+            return $this->createException('InvalidParameterValueException', 'Invalid parameter value. Parameter must be an array collection', 'E:S:001');
+        }
+        $countInserts = 0;
+        $insertedItems = array();
+
+        $linkResponse = $this->getCrawlerLink($link);
+        if ($linkResponse->error->exist) {
+            return $linkResponse;
+        }
+        foreach ($rules as $xPath) {
+            $ruleResponse = $this->getXPathRule($xPath);
+            if ($ruleResponse->error->exist) {
+                continue;
+            }
+            $entity = new BundleEntity\XpathRulesOfCrawlerLink();
+            $entity->setLink($linkResponse->result->set);
+            $entity->setRule($ruleResponse->result->set);
+            $this->em->persist($entity);
+            $insertedItems[] = $entity;
+            $countInserts++;
+        }
+        if ($countInserts > 0) {
+            $this->em->flush();
+            return new ModelResponse($insertedItems, $countInserts, 0, null, false, 'S:D:003', 'Selected entries have been successfully inserted into database.', $timeStamp, time());
+        }
+        return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
+    }
+    /**
      * @name            deleteCrawlerLink ()
      *
      * @since            1.0.0
@@ -700,6 +776,104 @@ class CrawlerModel extends CoreModel
         }
         return new ModelResponse(null, 0, 0, null, true, 'E:D:003', 'One or more entities cannot be inserted into database.', $timeStamp, time());
     }
+    /**
+     * @name            listXPathRulesOfCrawlerLinkEntries (
+     *
+     * @since           1.0.3
+     * @version         1.0.3
+     * @author          Said İmamoğlu
+     *
+     * @use             $this->createException()
+     *
+     * @param           array $link
+     * @param           array $filter
+     * @param           array $sortOrder
+     * @param           array $limit
+     *
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     */
+    public function listXPathRulesOfCrawlerLink($link,$filter = null, $sortOrder = null, $limit = null)
+    {
+        $linkResponse = $this->getCrawlerLink($link);
+        if ($linkResponse->error->exist) {
+            return $linkResponse;
+        }
+        $link = $linkResponse->result->set;
+        unset($linkResponse);
+        $filter[] = array(
+            'glue' => 'and',
+            'condition' => array('column' => $this->entity['xrli'] . '.link', 'comparison' => '=', 'value' => $link->getId()),
+        );
+        $response = $this->listXPathRulesOfCrawlerLinkEntries($filter,$sortOrder,$limit);
+        if ($response->error->exist) {
+            return $response;
+        }
+        $result = array();
+        foreach ($response->result->set as $item) {
+            $result[] = $item->getRule();
+        }
+        $countItems = count($result);
+        if ($countItems < 1) {
+            return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+        }
+        return new ModelResponse($result, $countItems, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+
+
+    }
+    /**
+     * @name            listXPathRulesOfCrawlerLinkEntries (
+     *
+     * @since           1.0.3
+     * @version         1.0.3
+     * @author          Said İmamoğlu
+     *
+     * @use             $this->createException()
+     *
+     * @param           array $filter
+     * @param           array $sortOrder
+     * @param           array $limit
+     *
+     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     */
+    public function listXPathRulesOfCrawlerLinkEntries($filter = null, $sortOrder = null, $limit = null)
+    {
+        $timeStamp = time();
+        $oStr = $wStr = $gStr = $fStr = '';
+        if (!is_array($sortOrder) && !is_null($sortOrder)) {
+            return $this->createException('InvalidSortOrderException', '$sortOrder must be an array with key => value pairs where value can only be "asc" or "desc".', 'E:S:002');
+        }
+        $qStr = 'SELECT ' . $this->entity['xrli']['alias']
+            . ' FROM ' . $this->entity['xrli']['name'] . ' ' . $this->entity['xrli']['alias'];
+        if (!is_null($sortOrder)) {
+            foreach ($sortOrder as $column => $direction) {
+                switch ($column) {
+                    case 'link':
+                    case 'rule':
+                        $column = $this->entity['xrli']['alias'] . '.' . $column;
+                        break;
+                }
+                $oStr .= ' ' . $column . ' ' . strtoupper($direction) . ', ';
+            }
+            $oStr = rtrim($oStr, ', ');
+            $oStr = ' ORDER BY ' . $oStr . ' ';
+        }
+
+        if (!is_null($filter)) {
+            $fStr = $this->prepareWhere($filter);
+            $wStr .= ' WHERE ' . $fStr;
+        }
+
+        $qStr .= $wStr . $gStr . $oStr;
+        $q = $this->em->createQuery($qStr);
+        $q = $this->addLimit($q, $limit);
+        $result = $q->getResult();
+        $countItems = count($result);
+
+        if (count($countItems) < 1) {
+            return new ModelResponse(null, 0, 0, null, true, 'E:D:002', 'No entries found in database that matches to your criterion.', $timeStamp, time());
+        }
+        return new ModelResponse($result, $countItems, 0, null, false, 'S:D:002', 'Entries successfully fetched from database.', $timeStamp, time());
+    }
 
     /**
      * @name            listCrawlerLinks ()
@@ -751,7 +925,6 @@ class CrawlerModel extends CoreModel
         $qStr .= $wStr . $gStr . $oStr;
         $q = $this->em->createQuery($qStr);
         $q = $this->addLimit($q, $limit);
-
         $result = $q->getResult();
 
         $entities = array();
@@ -877,7 +1050,6 @@ class CrawlerModel extends CoreModel
         $qStr .= $wStr . $gStr . $oStr;
         $q = $this->em->createQuery($qStr);
         $q = $this->addLimit($q, $limit);
-
         $result = $q->getResult();
         $totalRows = count($result);
         if ($totalRows < 1) {
@@ -899,27 +1071,27 @@ class CrawlerModel extends CoreModel
      * @use             $this->getCrawlerLink
      * @use             $this->listXPathRules()
      *
-     * @param           mixed $link
+     * @param           mixed $xpath
      * @param           array $filter
      * @param           array $sortOrder
      * @param           array $limit
      *
      * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
      */
-    public function listXPathRulesOfParent($link, $filter = null, $sortOrder = null, $limit = null)
+    public function listXPathRulesOfParent($xpath, $filter = null, $sortOrder = null, $limit = null)
     {
-        $response = $this->getCrawlerLink($link);
+        $response = $this->getXPathRule($xpath);
         if ($response->error->exist) {
             return $response;
         }
-        $link = $response->result->set;
-        $column = $this->entity['bp']['alias'] . '.parent';
+        $xpath = $response->result->set;
+        $column = $this->entity['xr']['alias'] . '.parent';
         $filter[] = array(
             'glue' => 'and',
             'condition' => array(
                 array(
                     'glue' => 'and',
-                    'condition' => array('column' => $column, 'comparison' => '=', 'value' => $link->getId()),
+                    'condition' => array('column' => $column, 'comparison' => '=', 'value' => $xpath->getId()),
                 )
             )
         );
@@ -927,51 +1099,40 @@ class CrawlerModel extends CoreModel
     }
 
     /**
-     * @name            listXPathRulesOfCrawlerLink (
-     *
-     * @since           1.0.2
-     * @version         1.0.2
-     * @author          Said İmamoğlu
-     *
-     * @use             $this->createException()
-     * @use             $this->getCrawlerLink()
-     * @use             $this->listXPathRules()
-     *
-     * @param           mixed $link
-     * @param           array $filter
-     * @param           array $sortOrder
-     * @param           array $limit
-     *
-     * @return          \BiberLtd\Bundle\CoreBundle\Responses\ModelResponse
+     * @name listParentXPathRulesOfCrawlerLink()
+     * @author  Said İmamoğlu
+     * @since 1.0.2
+     * @version 1.0.2
+
+     * @param $link
+     * @param $filter
+     * @param $sortOrder
+     * @param $limit
+     * @return array
      */
-    public function listXPathRulesOfCrawlerLink($link, $filter = null, $sortOrder = null, $limit = null)
+    public function listParentXPathRulesOfCrawlerLink($link,$filter = null, $sortOrder = null, $limit = null)
     {
-        $response = $this->getCrawlerLink($link);
+        $response = $this->listXPathRulesOfCrawlerLink($link);
         if ($response->error->exist) {
             return $response;
         }
-        $link = $response->result->set;
-        $query_str = 'SELECT ' . $this->entity['xrli']['alias']
-            . ' FROM ' . $this->entity['xrli']['name'] . ' ' . $this->entity['xrli']['alias']
-            . ' WHERE ' . $this->entity['xrli']['alias'] . '.link = ' . $link->getId();
-        $query = $this->em->createQuery($query_str);
-        $result = $query->getResult();
-
         $xPathIds = array();
-        if (count($result) > 0) {
-            foreach ($result as $cobp) {
-                $id = $cobp->getXpath()->getId();
-                $xPathIds[] = $id;
-            }
+        foreach ($response->result->set as $xPath) {
+            $xPathIds[] = $xPath->getId();
         }
-        if (!empty($xPathIds)) {
-            $filter[] = array(
-                'glue' => 'and',
-                'condition' => array('column' =>$this->entity['xr']['alias'].'.id' , 'comparison' => 'in', 'value' =>$xPathIds ),
-            );
-        }
+        $filter = array();
+        $filter[] = array(
+            'glue' => 'and',
+            'condition' => array('column' => $this->entity['xr'] . '.parent', 'comparison' => ' = ', 'value' => null),
+        );
+        $filter[] = array(
+            'glue' => 'and',
+            'condition' => array('column' => $this->entity['xr'] . '.xpath', 'comparison' => 'in', 'value' => $xPathIds),
+        );
         return $this->listXPathRules($filter,$sortOrder,$limit);
+
     }
+
 
     /**
      * @name            updateCrawlerLink ()
@@ -1208,9 +1369,15 @@ class CrawlerModel extends CoreModel
 /**
  * Change Log
  * **************************************
+ * v1.0.3                      11.08.2015
+ * Said İmamoğlu
+ * **************************************
+ * FR :: addXPathRulesToCrawlerLink() added.
+ * **************************************
  * v1.0.2                      23.07.2015
  * Said İmamoğlu
  * **************************************
+ * FR :: listParentXPathRulesOfCrawlerLink() added.
  * FR :: doesXPathRuleExist(),deleteXPathRules(),getXPathRule(),
  *       listXPathRules(),listXPathRulesOfCrawlerLink() and listXPathRulesOfParent()
  *       methods are implemented.
