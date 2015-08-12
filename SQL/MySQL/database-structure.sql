@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2015-07-23 14:34:36
+Date: 2015-08-12 09:56:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,10 +31,6 @@ CREATE TABLE `crawler_link` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci;
 
 -- ----------------------------
--- Records of crawler_link
--- ----------------------------
-
--- ----------------------------
 -- Table structure for crawler_log
 -- ----------------------------
 DROP TABLE IF EXISTS `crawler_log`;
@@ -53,13 +49,9 @@ CREATE TABLE `crawler_log` (
   UNIQUE KEY `idxUCrawlerLog` (`timestamp`,`link`,`rule`) USING BTREE,
   KEY `idxFCrawledLink` (`link`),
   KEY `idxFXpathRuleOfLog` (`rule`),
-  CONSTRAINT `idxFXpathRuleOfLog` FOREIGN KEY (`rule`) REFERENCES `xpath_rule` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `idxFCrawledLink` FOREIGN KEY (`link`) REFERENCES `crawler_link` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `idxFCrawledLink` FOREIGN KEY (`link`) REFERENCES `crawler_link` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `idxFXpathRuleOfLog` FOREIGN KEY (`rule`) REFERENCES `xpath_rule` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci;
-
--- ----------------------------
--- Records of crawler_log
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for xpath_rule
@@ -68,12 +60,9 @@ DROP TABLE IF EXISTS `xpath_rule`;
 CREATE TABLE `xpath_rule` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'System given id.',
   `rule` text COLLATE utf8_turkish_ci NOT NULL COMMENT 'Xpath rule definition.',
+  `parentRule` varchar(255) COLLATE utf8_turkish_ci DEFAULT NULL COMMENT 'Parent rule set.',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci;
-
--- ----------------------------
--- Records of xpath_rule
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for xpath_rules_of_crawler_link
@@ -82,12 +71,10 @@ DROP TABLE IF EXISTS `xpath_rules_of_crawler_link`;
 CREATE TABLE `xpath_rules_of_crawler_link` (
   `link` bigint(15) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Link that rule belongs to.',
   `rule` int(10) unsigned NOT NULL COMMENT 'Rule that link belongs to.',
+  `title` varchar(155) COLLATE utf8_turkish_ci DEFAULT NULL,
   PRIMARY KEY (`link`,`rule`),
+  UNIQUE KEY `idxUTitleOfXpathRuleOfCrawlerLink` (`title`) USING BTREE,
   KEY `idxFLinkOfXpathRule` (`rule`),
   CONSTRAINT `idxFLinkOfXpathRule` FOREIGN KEY (`rule`) REFERENCES `xpath_rule` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `idxFRuleOfCrawlerLink` FOREIGN KEY (`link`) REFERENCES `crawler_link` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_turkish_ci;
-
--- ----------------------------
--- Records of xpath_rules_of_crawler_link
--- ----------------------------

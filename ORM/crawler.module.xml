@@ -87,8 +87,9 @@
       <association-field from="parent" to="id"/>
     </association>
     <entity name="\BiberLtd\Bundle\CrawlerBundle\Entity\XpathRulesOfCrawlerLink" local-name="XpathRulesOfCrawlerLink" namespace="\BiberLtd\Bundle\CrawlerBundle\Entity" description="Associates xpath rules with links to be crawled&#xE7;" uuid="f7ec7c26-785a-4331-9b99-b03bf56ad5a3">
-      <field name="link" type="bigint" size="15" required="true" primary="true" unsigned="true" uuid="4fc17863-75f9-4aa3-b671-468dbf134f89"/>
-      <field name="rule" type="integer" required="true" primary="true" uuid="64662207-11f4-42f9-9548-60aa15193478"/>
+      <field name="link" description="Crawler link." type="bigint" size="15" required="true" primary="true" unsigned="true" uuid="4fc17863-75f9-4aa3-b671-468dbf134f89"/>
+      <field name="rule" description="Xpath rule" type="integer" required="true" primary="true" uuid="64662207-11f4-42f9-9548-60aa15193478"/>
+      <field name="title" description="Match title." type="string" size="155" unique="true" uuid="7788900d-d1a5-417d-9f92-1185724f3e43"/>
       <orm-attributes>
         <attribute name="export-file-name">XpathRulesOfCrawlerLink.php</attribute>
         <attribute name="table">xpath_rules_of_crawler_link</attribute>

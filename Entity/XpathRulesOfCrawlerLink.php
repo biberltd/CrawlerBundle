@@ -1,4 +1,17 @@
 <?php
+/**
+ * @name        XpathRulesOfCrawlerLink
+ * @package		BiberLtd\CrawlerBundle
+ *
+ * @author		Can Berkol
+ *
+ * @version     1.0.1
+ * @date        12.08.2015
+ *
+ * @copyright   Biber Ltd. (http://www.biberltd.com)
+ * @license     GPL v3.0
+ *
+ */
 namespace BiberLtd\Bundle\CrawlerBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 
@@ -11,6 +24,10 @@ use Doctrine\ORM\Mapping AS ORM;
  */
 class XpathRulesOfCrawlerLink
 {
+    /**
+     * @ORM\Column(type="string", unique=true, length=155, nullable=true)
+     */
+    private $title;
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\CrawlerBundle\Entity\CrawlerLink")
@@ -97,4 +114,46 @@ class XpathRulesOfCrawlerLink
         return $this;
     }
 
+    /**
+     * @name        getTitle ()
+     *
+     * @author      Can Berkol
+     *
+     * @since       1.0.1
+     * @version     1.0.1
+     *
+     * @return      mixed
+     */
+    public function getTitle(){
+        return $this->title;
+    }
+
+    /**
+     * @name        setTitle ()
+     *
+     * @author      Can Berkol
+     *
+     * @since       1.0.1
+     * @version     1.0.1
+     *
+     * @param       mixed $title
+     *
+     * @return      $this
+     */
+    public function setTitle($title){
+        if(!$this->setModified('title', $title)->isModified()){
+            return $this;
+        }
+        $this->title = $title;
+
+        return $this;
+    }
 }
+/**
+ * Change Log:
+ * **************************************
+ * v1.0.0					   12.08.2015
+ * Can Berkol
+ * **************************************
+ * FR :: title field added.
+ */
