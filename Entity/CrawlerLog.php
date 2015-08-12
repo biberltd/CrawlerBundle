@@ -358,6 +358,43 @@ class CrawlerLog extends CoreEntity{
 
 		return $this;
 	}
+
+	/**
+	 * @name        getMicrotime ()
+	 *
+	 * @author      Said İmamoğlu
+	 *
+	 * @since       1.0.0
+	 * @version     1.0.0
+	 *
+	 * @return      mixed
+	 */
+	public function getMicrotime()
+	{
+		return $this->microtime;
+	}
+
+	/**
+	 * @name        setMicrotime ()
+	 *
+	 * @author      Said İmamoğlu
+	 *
+	 * @since       1.0.0
+	 * @version     1.0.0
+	 *
+	 * @param       mixed $microtime
+	 *
+	 * @return      $this
+	 */
+	public function setMicrotime($microtime)
+	{
+		if (!$this->setModified('microtime', $microtime)->isModified()) {
+			return $this;
+		}
+		$this->microtime = $microtime;
+		return $this;
+	}
+
 }
 /**
  * Change Log:
