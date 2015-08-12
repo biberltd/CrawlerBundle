@@ -90,6 +90,9 @@
       <field name="link" description="Crawler link." type="bigint" size="15" required="true" primary="true" unsigned="true" uuid="4fc17863-75f9-4aa3-b671-468dbf134f89"/>
       <field name="rule" description="Xpath rule" type="integer" required="true" primary="true" uuid="64662207-11f4-42f9-9548-60aa15193478"/>
       <field name="title" description="Match title." type="string" size="155" unique="true" uuid="7788900d-d1a5-417d-9f92-1185724f3e43"/>
+      <index name="idxUTitleOfXpathRuleOfCrawlerLink" unique="true">
+        <index-field name="title"/>
+      </index>
       <orm-attributes>
         <attribute name="export-file-name">XpathRulesOfCrawlerLink.php</attribute>
         <attribute name="table">xpath_rules_of_crawler_link</attribute>

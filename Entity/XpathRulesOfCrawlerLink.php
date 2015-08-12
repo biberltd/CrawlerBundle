@@ -19,7 +19,8 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     name="xpath_rules_of_crawler_link",
- *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"}
+ *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="idxUTitleOfXpathRuleOfCrawlerLink", columns={"title"})}
  * )
  */
 class XpathRulesOfCrawlerLink
