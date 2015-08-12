@@ -71,9 +71,9 @@ DROP TABLE IF EXISTS `xpath_rules_of_crawler_link`;
 CREATE TABLE `xpath_rules_of_crawler_link` (
   `link` bigint(15) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Link that rule belongs to.',
   `rule` int(10) unsigned NOT NULL COMMENT 'Rule that link belongs to.',
-  `title` varchar(155) COLLATE utf8_turkish_ci DEFAULT NULL,
+  `code` varchar(155) COLLATE utf8_turkish_ci DEFAULT NULL,
   PRIMARY KEY (`link`,`rule`),
-  UNIQUE KEY `idxUTitleOfXpathRuleOfCrawlerLink` (`title`) USING BTREE,
+  UNIQUE KEY `idxUTitleOfXpathRuleOfCrawlerLink` (`code`) USING BTREE,
   KEY `idxFLinkOfXpathRule` (`rule`),
   CONSTRAINT `idxFLinkOfXpathRule` FOREIGN KEY (`rule`) REFERENCES `xpath_rule` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `idxFRuleOfCrawlerLink` FOREIGN KEY (`link`) REFERENCES `crawler_link` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
