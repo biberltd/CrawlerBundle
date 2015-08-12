@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(
  *     name="xpath_rules_of_crawler_link",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idxUTitleOfXpathRuleOfCrawlerLink", columns={"title"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="idxUCodeOfXpathRuleOfCrawlerLink", columns={"code"})}
  * )
  */
 class XpathRulesOfCrawlerLink
@@ -28,7 +28,7 @@ class XpathRulesOfCrawlerLink
     /**
      * @ORM\Column(type="string", unique=true, length=155, nullable=true)
      */
-    private $title;
+    private $code;
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\CrawlerBundle\Entity\CrawlerLink")
@@ -116,7 +116,7 @@ class XpathRulesOfCrawlerLink
     }
 
     /**
-     * @name        getTitle ()
+     * @name        getCode ()
      *
      * @author      Can Berkol
      *
@@ -125,27 +125,27 @@ class XpathRulesOfCrawlerLink
      *
      * @return      mixed
      */
-    public function getTitle(){
-        return $this->title;
+    public function getCode(){
+        return $this->code;
     }
 
     /**
-     * @name        setTitle ()
+     * @name        setCode ()
      *
      * @author      Can Berkol
      *
      * @since       1.0.1
      * @version     1.0.1
      *
-     * @param       mixed $title
+     * @param       mixed $code
      *
      * @return      $this
      */
-    public function setTitle($title){
-        if(!$this->setModified('title', $title)->isModified()){
+    public function setCode($code){
+        if(!$this->setModified('code', $code)->isModified()){
             return $this;
         }
-        $this->title = $title;
+        $this->code = $code;
 
         return $this;
     }
@@ -156,5 +156,5 @@ class XpathRulesOfCrawlerLink
  * v1.0.0					   12.08.2015
  * Can Berkol
  * **************************************
- * FR :: title field added.
+ * FR :: code field added.
  */
