@@ -249,6 +249,42 @@ class CrawlerLog extends CoreEntity{
 	}
 
 	/**
+	 * @name        getRule ()
+	 *
+	 * @author      Said İmamoğlu
+	 *
+	 * @since       1.0.0
+	 * @version     1.0.0
+	 *
+	 * @return      mixed
+	 */
+	public function getRule()
+	{
+		return $this->rule;
+	}
+
+	/**
+	 * @name        setRule ()
+	 *
+	 * @author      Said İmamoğlu
+	 *
+	 * @since       1.0.0
+	 * @version     1.0.0
+	 *
+	 * @param       mixed $rule
+	 *
+	 * @return      $this
+	 */
+	public function setRule($rule)
+	{
+		if (!$this->setModified('rule', $rule)->isModified()) {
+			return $this;
+		}
+		$this->rule = $rule;
+		return $this;
+	}
+
+	/**
 	 * @name        getStatus ()
 	 *
 	 * @author      Can Berkol
