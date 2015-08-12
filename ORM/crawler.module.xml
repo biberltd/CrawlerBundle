@@ -32,13 +32,14 @@
       <field name="content" description="Either stored file name or crawled content." type="text" uuid="fe73d9b5-b60a-4bfa-b10b-7a6b60a52e81"/>
       <field name="link" description="Address that is crawled." type="bigint" size="15" required="true" unsigned="true" uuid="0c3a167f-21b0-48a2-a507-483d9ec30ffd"/>
       <field name="rule" description="Xpath rule that is crawled." type="integer" uuid="bfde6cdf-4293-4428-9e23-260ccff174bd"/>
+      <field name="microtime" description="Microtime time stamp." type="integer" unique="true" uuid="18f9f876-929d-4a7e-9cc7-0b06a9ce25e2"/>
       <index name="idxUCrawlerLogId" unique="true">
         <index-field name="id"/>
       </index>
       <index name="idxUCrawlerLog" unique="true">
-        <index-field name="timestamp"/>
         <index-field name="link"/>
         <index-field name="rule"/>
+        <index-field name="microtime"/>
       </index>
       <index name="idxUCrawlerLogHash" unique="true">
         <index-field name="hash"/>
@@ -89,9 +90,9 @@
     <entity name="\BiberLtd\Bundle\CrawlerBundle\Entity\XpathRulesOfCrawlerLink" local-name="XpathRulesOfCrawlerLink" namespace="\BiberLtd\Bundle\CrawlerBundle\Entity" description="Associates xpath rules with links to be crawled&#xE7;" uuid="f7ec7c26-785a-4331-9b99-b03bf56ad5a3">
       <field name="link" description="Crawler link." type="bigint" size="15" required="true" primary="true" unsigned="true" uuid="4fc17863-75f9-4aa3-b671-468dbf134f89"/>
       <field name="rule" description="Xpath rule" type="integer" required="true" primary="true" uuid="64662207-11f4-42f9-9548-60aa15193478"/>
-      <field name="title" description="Match title." type="string" size="155" unique="true" uuid="7788900d-d1a5-417d-9f92-1185724f3e43"/>
+      <field name="code" description="Match title." type="string" size="155" unique="true" uuid="7788900d-d1a5-417d-9f92-1185724f3e43"/>
       <index name="idxUTitleOfXpathRuleOfCrawlerLink" unique="true">
-        <index-field name="title"/>
+        <index-field name="code"/>
       </index>
       <orm-attributes>
         <attribute name="export-file-name">XpathRulesOfCrawlerLink.php</attribute>

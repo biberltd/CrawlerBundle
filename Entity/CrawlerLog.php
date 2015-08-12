@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     options={"collate":"utf8_turkish_ci","charset":"utf8","engine":"innodb"},
  *     uniqueConstraints={
  *         @ORM\UniqueConstraint(name="idxUCrawlerLogId", columns={"id"}),
- *         @ORM\UniqueConstraint(name="idxUCrawlerLog", columns={"timestamp","link","rule"}),
+ *         @ORM\UniqueConstraint(name="idxUCrawlerLog", columns={"link","rule","microtime"}),
  *         @ORM\UniqueConstraint(name="idxUCrawlerLogHash", columns={"hash"})
  *     }
  * )
@@ -59,6 +59,11 @@ class CrawlerLog{
      * @ORM\Column(type="text", nullable=true)
      */
     private $content;
+
+    /**
+     * @ORM\Column(type="integer", unique=true, nullable=true)
+     */
+    private $microtime;
 
     /**
      * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\CrawlerBundle\Entity\CrawlerLink")

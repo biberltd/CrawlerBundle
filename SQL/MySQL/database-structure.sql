@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2015-08-12 09:56:16
+Date: 2015-08-12 14:54:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -43,10 +43,11 @@ CREATE TABLE `crawler_log` (
   `link` bigint(15) unsigned DEFAULT NULL COMMENT 'This is field indicates which link is crawled.',
   `content` text COLLATE utf8_turkish_ci COMMENT 'Stored file''s name or crawled content.',
   `rule` int(10) unsigned DEFAULT NULL COMMENT 'Rule that is crawled.',
+  `micrtotime` int(15) unsigned NOT NULL COMMENT 'Microtime timestamp.',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idxUCrawlerLogId` (`id`),
   UNIQUE KEY `idxUCrawlerLogHash` (`hash`),
-  UNIQUE KEY `idxUCrawlerLog` (`timestamp`,`link`,`rule`) USING BTREE,
+  UNIQUE KEY `idxUCrawlerLog` (`micrtotime`,`link`,`rule`) USING BTREE,
   KEY `idxFCrawledLink` (`link`),
   KEY `idxFXpathRuleOfLog` (`rule`),
   CONSTRAINT `idxFCrawledLink` FOREIGN KEY (`link`) REFERENCES `crawler_link` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -71,9 +72,9 @@ DROP TABLE IF EXISTS `xpath_rules_of_crawler_link`;
 CREATE TABLE `xpath_rules_of_crawler_link` (
   `link` bigint(15) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Link that rule belongs to.',
   `rule` int(10) unsigned NOT NULL COMMENT 'Rule that link belongs to.',
-  `title` varchar(155) COLLATE utf8_turkish_ci DEFAULT NULL,
+  `code` varchar(155) COLLATE utf8_turkish_ci DEFAULT NULL,
   PRIMARY KEY (`link`,`rule`),
-  UNIQUE KEY `idxUTitleOfXpathRuleOfCrawlerLink` (`title`) USING BTREE,
+  UNIQUE KEY `idxUTitleOfXpathRuleOfCrawlerLink` (`code`) USING BTREE,
   KEY `idxFLinkOfXpathRule` (`rule`),
   CONSTRAINT `idxFLinkOfXpathRule` FOREIGN KEY (`rule`) REFERENCES `xpath_rule` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `idxFRuleOfCrawlerLink` FOREIGN KEY (`link`) REFERENCES `crawler_link` (`id`) ON DELETE CASCADE ON UPDATE CASCADE

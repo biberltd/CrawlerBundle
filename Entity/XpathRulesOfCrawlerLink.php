@@ -20,13 +20,17 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(
  *     name="xpath_rules_of_crawler_link",
  *     options={"charset":"utf8","collate":"utf8_turkish_ci","engine":"innodb"},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="idxUTitleOfXpathRuleOfCrawlerLink", columns={"title"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="idxUTitleOfXpathRuleOfCrawlerLink", columns={"code"})}
  * )
  */
 class XpathRulesOfCrawlerLink
 {
     /**
      * @ORM\Column(type="string", unique=true, length=155, nullable=true)
+     */
+    private $code;
+    /**
+     * 
      */
     private $title;
     /**
