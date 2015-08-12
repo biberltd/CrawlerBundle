@@ -13,6 +13,7 @@
  *
  */
 namespace BiberLtd\Bundle\CrawlerBundle\Entity;
+use BiberLtd\Bundle\CoreBundle\CoreEntity;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
