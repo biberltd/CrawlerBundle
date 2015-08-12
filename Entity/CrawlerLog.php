@@ -27,7 +27,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     }
  * )
  */
-class CrawlerLog{
+class CrawlerLog extends CoreEntity{
     /**
      * @ORM\Id
      * @ORM\Column(type="bigint", length=15, options={"unsigned":true})

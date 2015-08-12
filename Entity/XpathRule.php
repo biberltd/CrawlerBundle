@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     indexes={@ORM\Index(name="idxNXpathRules", columns={"rule"})}
  * )
  */
-class XpathRule
+class XpathRule extends CoreEntity
 {
     /**
      * @ORM\Id

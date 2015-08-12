@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="idxUCodeOfXpathRuleOfCrawlerLink", columns={"code"})}
  * )
  */
-class XpathRulesOfCrawlerLink
+class XpathRulesOfCrawlerLink extends CoreEntity
 {
     /**
      * @ORM\Column(type="string", unique=true, length=155, nullable=true)
