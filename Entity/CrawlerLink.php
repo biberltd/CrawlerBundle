@@ -6,7 +6,7 @@
  * @author		Can Berkol
  *
  * @version     1.0.0
- * @date        05.05.2014
+ * @date        05.05.2015
  *
  * @copyright   Biber Ltd. (http://www.biberltd.com)
  * @license     GPL v3.0
