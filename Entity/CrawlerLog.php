@@ -61,7 +61,7 @@ class CrawlerLog{
     private $content;
 
     /**
-     * @ORM\ManyToOne(targetEntity="BiberLtd\Core\Bundles\CrawlerBundle\Entity\CrawlerLink")
+     * @ORM\ManyToOne(targetEntity="BiberLtd\Bundle\CrawlerBundle\Entity\CrawlerLink")
      * @ORM\JoinColumn(name="link", referencedColumnName="id", onDelete="CASCADE")
      */
     private $link;
